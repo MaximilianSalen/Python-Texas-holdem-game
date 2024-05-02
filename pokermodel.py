@@ -91,11 +91,11 @@ class MoneyModel(QObject):
 
 
 class Player(QObject):
-    def __init__(self, name):
+    def __init__(self, name, starting_money):
         super().__init__()
         self.name = name
         self.hand = HandModel()
-        self.money = MoneyModel(1000)   # Define the amount of money the players start with
+        self.money = MoneyModel(starting_money)   # Define the amount of money the players start with
         self.betted = MoneyModel()
         self.previous_bet = MoneyModel()
 
