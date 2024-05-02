@@ -4,7 +4,9 @@ import sys
 
 def main():
     qt_app = QApplication(sys.argv)
-    game = TexasHoldEm([Player('Maximilian'), Player('Axel')])
+    player_1 = input("Enter Player 1's name:\n")
+    player_2 = input("Enter Player 2's name:\n")
+    game = TexasHoldEm([Player(player_1), Player(player_2)])
     win = MyWindow(game)
     win.show()
 
