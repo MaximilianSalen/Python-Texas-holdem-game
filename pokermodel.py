@@ -122,10 +122,11 @@ class TexasHoldEm(QObject):
     active_player_changed = pyqtSignal()    # Signal only handling when the active player is changed.
     game_message = pyqtSignal((str,))       # Signal handling game messages
 
-    def __init__(self, players):
+    def __init__(self, players, blind_amount):
         super().__init__()
         self.players = players
         self.active_player = 0
+        self.blind_amount = blind_amount
         self.pot = MoneyModel()
         self.table = TableModel()
         self.__new_round()  # Initializes a new round when program is launched
@@ -145,7 +146,7 @@ class TexasHoldEm(QObject):
             player.hand.add_card(self.deck.draw())
 
         self.change_active_player()
-        self.blind(self.players[self.active_player])
+        self.blind(self.players[self.active_player], self.blind_amount)
         self.players[self.active_player].hand.flip()
         self.change_active_player()
         self.check()
@@ -260,9 +261,9 @@ class TexasHoldEm(QObject):
             self.players[0].hand.flip()
             self.players[1].hand.flip()
 
-    def blind(self, blind_player):
-        self.pot += 50
-        blind_player.place_bet(50)
+    def blind(self, blind_player, blind_amount=50):
+        self.pot += blind_amount
+        blind_player.place_bet(blind_amount)
         self.blind_player_name = blind_player.name
 
 

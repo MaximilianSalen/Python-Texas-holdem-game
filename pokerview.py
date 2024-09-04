@@ -118,11 +118,11 @@ class ActionBar(QGroupBox):
         self.active_label = QLabel()
         self.blind_label = QLabel()
         self.bet = QPushButton("Bet")
+        self.betting_amount = QSpinBox()
+        self.betting_amount.setMinimum(50)
         self.call = QPushButton("Call")
         self.check = QPushButton("Check")
         self.fold = QPushButton("Fold")
-        self.betting_amount = QSpinBox()
-        self.betting_amount.setMinimum(50)
 
         vbox = QVBoxLayout()
 
@@ -130,12 +130,12 @@ class ActionBar(QGroupBox):
         vbox.addWidget(self.active_label)
         vbox.addWidget(self.blind_label)
         vbox.addWidget(self.pot)
+        vbox.addWidget(self.betting_amount)
         vbox.addWidget(self.bet)
         vbox.addWidget(self.call)
         vbox.addWidget(self.bet)
         vbox.addWidget(self.check)
         vbox.addWidget(self.fold)
-        vbox.addWidget(self.betting_amount)
 
         self.setLayout(vbox)
 
@@ -201,9 +201,25 @@ class PlayerView(QGroupBox):
 
         self.update_money()
 
+        # Set the title (player name) to bold
+        self.set_bold_title()
+
     def update_money(self):
         self.money_label.setText('Money\n$ {}' .format(self.player.money.value))
+    
+    def set_bold_title(self):
+        # Create a QFont and set it to bold
+        font = QFont()
+        font.setBold(True)
 
+        # Get the current title (player's name)
+        title = self.title()
+
+        # Set the new bold title
+        self.setTitle(title)
+
+        # Set the font to the title
+        self.setFont(font)
 
 class GameView(QWidget):
     def __init__(self, game):
