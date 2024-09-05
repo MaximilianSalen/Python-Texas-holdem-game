@@ -26,7 +26,7 @@ To run the game, use the following command from poke_module:
 
 Enter the names of the players on command line, followed by the amount of money each player is given and the blind amount.
 
-To run tests:
+To run tests (from root):
 ```bash
 pytest
 ```
