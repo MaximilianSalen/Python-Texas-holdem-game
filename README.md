@@ -4,6 +4,7 @@ This is a simple 2 player texas hold'em game is initialized from command line wi
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
+- [Improvement](#improvement ideas)
 
 
 ## Installation
@@ -26,3 +27,7 @@ To run the game, use the following command:
 Enter the names of the players on command line, followed by the amount of money each player is given and the blind amount.
 
 Enjoy!
+
+## Improvement ideas
+- Initialization window for entering player names, money and blind amount.
+- 2 second countdown after ending a turn to not reveal cards to opponent.
