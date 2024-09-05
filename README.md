@@ -19,7 +19,7 @@ This is a simple 2 player texas hold'em game is initialized from command line wi
 ```
 
 ## Usage
-To run the game, use the following command:
+To run the game, use the following command from poke_module:
 ```bash
  python pokergame.py
 ```

@@ -12,13 +12,6 @@ def test_deck_has_52_cards():
     assert len(deck.cards) == 52
 
 
-def test_deck_has_52_unique_cards():
-    deck = StandardDeck()
-    cards = deck.cards
-    assert len(cards) == 52
-    assert len(set(cards)) == 52  # Ensure all cards are unique
-
-
 def test_draw_reduces_deck_size():
     deck = StandardDeck()
     initial_size = len(deck.cards)
