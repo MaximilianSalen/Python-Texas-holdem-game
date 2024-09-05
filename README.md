@@ -24,6 +24,11 @@ To run the game, use the following command from poke_module:
  python pokergame.py
 ```
 
+To run tests:
+```bash
+pytest
+```
+
 Enter the names of the players on command line, followed by the amount of money each player is given and the blind amount.
 
 Enjoy!
