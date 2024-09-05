@@ -4,7 +4,6 @@ from PyQt5.QtSvg import *
 from PyQt5.QtWidgets import *
 from abc import abstractmethod
 import sys
-from typing import Iterator, Dict, Tuple
 
 
 ###################
@@ -13,60 +12,58 @@ from typing import Iterator, Dict, Tuple
 
 
 class CardModel(QObject):
-    """Base class that describes what is expected from the CardView widget"""
+    """Base class that described what is expected from the CardView widget"""
 
-    new_cards = pyqtSignal()  #: Signal should be emitted when cards change.
+    new_cards = pyqtSignal()  #: Signal should be emited when cards change.
 
     @abstractmethod
-    def __iter__(self) -> Iterator["MySimpleCard"]:
+    def __iter__(self):
         """Returns an iterator of card objects"""
-        pass
 
     @abstractmethod
-    def flipped(self) -> bool:
-        """Returns true if cards should be drawn face down"""
-        pass
+    def flipped(self):
+        """Returns true of cards should be drawn face down"""
 
 
 # A trivial card class
 class MySimpleCard:
-    def __init__(self, value: int, suit: int) -> None:
+    def __init__(self, value, suit):
         self.value = value
         self.suit = suit
 
-    def get_value(self) -> int:
+    def get_value(self):
         return self.value
 
 
 class Hand:
-    def __init__(self) -> None:
-        # Let's use some hardcoded values for most of this to start with
+    def __init__(self):
+        # Lets use some hardcoded values for most of this to start with
         self.cards = [MySimpleCard(13, 2), MySimpleCard(7, 0), MySimpleCard(13, 1)]
 
-    def add_card(self, card: MySimpleCard) -> None:
+    def add_card(self, card):
         self.cards.append(card)
 
 
 class HandModel(Hand, CardModel):
-    def __init__(self) -> None:
+    def __init__(self):
         Hand.__init__(self)
         CardModel.__init__(self)
         # Additional state needed by the UI
         self.flipped_cards = False
 
-    def __iter__(self) -> Iterator[MySimpleCard]:
+    def __iter__(self):
         return iter(self.cards)
 
-    def flip(self) -> None:
+    def flip(self):
         # Flips over the cards (to hide them)
         self.flipped_cards = not self.flipped_cards
         self.new_cards.emit()  # something changed, better emit the signal!
 
-    def flipped(self) -> bool:
+    def flipped(self):
         # This model only flips all or no cards, so we don't care about the index.
         return self.flipped_cards
 
-    def add_card(self, card: MySimpleCard) -> None:
+    def add_card(self, card):
         super().add_card(card)
         self.new_cards.emit()  # something changed, better emit the signal!
 
@@ -79,7 +76,7 @@ class HandModel(Hand, CardModel):
 class TableScene(QGraphicsScene):
     """A scene with a table cloth background"""
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
         self.tile = QPixmap("cards/table.png")
         self.setBackgroundBrush(QBrush(self.tile))
@@ -88,18 +85,18 @@ class TableScene(QGraphicsScene):
 class CardItem(QGraphicsSvgItem):
     """A simple overloaded QGraphicsSvgItem that also stores the card position"""
 
-    def __init__(self, renderer: QSvgRenderer, position: int) -> None:
+    def __init__(self, renderer, position):
         super().__init__()
         self.setSharedRenderer(renderer)
         self.position = position
 
 
-def read_cards() -> Dict[Tuple[int, int], QSvgRenderer]:
+def read_cards():
     """
     Reads all the 52 cards from files.
     :return: Dictionary of SVG renderers
     """
-    all_cards: Dict[Tuple[int, int], QSvgRenderer] = (
+    all_cards = (
         dict()
     )  # Dictionaries let us have convenient mappings between cards and their images
     for suit_file, suit in zip("HDSC", range(4)):
@@ -114,18 +111,18 @@ def read_cards() -> Dict[Tuple[int, int], QSvgRenderer]:
 
 
 class CardView(QGraphicsView):
-    """A View widget that represents the table area displaying a player's cards."""
+    """A View widget that represents the table area displaying a players cards."""
 
     # We read all the card graphics as static class variables
-    back_card: QSvgRenderer = QSvgRenderer("cards/Red_Back_2.svg")
-    all_cards: Dict[Tuple[int, int], QSvgRenderer] = read_cards()
+    back_card = QSvgRenderer("cards/Red_Back_2.svg")
+    all_cards = read_cards()
 
     def __init__(
         self, card_model: CardModel, card_spacing: int = 250, padding: int = 10
-    ) -> None:
+    ):
         """
         Initializes the view to display the content of the given model
-        :param card_model: A model that represents a set of cards. Needs to support the CardModel interface.
+        :param cards_model: A model that represents a set of cards. Needs to support the CardModel interface.
         :param card_spacing: Spacing between the visualized cards.
         :param padding: Padding of table area around the visualized cards.
         """
@@ -136,14 +133,14 @@ class CardView(QGraphicsView):
         self.padding = padding
 
         self.model = card_model
-        # Whenever this window should update, it should call the "change_cards" method.
+        # Whenever the this window should update, it should call the "change_cards" method.
 
         card_model.new_cards.connect(self.change_cards)
 
         # Add the cards the first time around to represent the initial state.
         self.change_cards()
 
-    def change_cards(self) -> None:
+    def change_cards(self):
         # Add the cards from scratch
         self.scene.clear()
         for i, card in enumerate(self.model):
@@ -169,7 +166,7 @@ class CardView(QGraphicsView):
 
         self.update_view()
 
-    def update_view(self) -> None:
+    def update_view(self):
         scale = (self.viewport().height() - 2 * self.padding) / 313
         self.resetTransform()
         self.scale(scale, scale)
@@ -181,19 +178,33 @@ class CardView(QGraphicsView):
             self.viewport().height() // scale,
         )
 
-    def resizeEvent(self, painter: QResizeEvent) -> None:
+    def resizeEvent(self, painter):
         # This method is called when the window is resized.
-        # If the widget is resized, adjust the card sizes.
+        # If the widget is resize, adjust the card sizes.
         # QGraphicsView automatically re-paints everything when we modify the scene.
         self.update_view()
         super().resizeEvent(painter)
+
+    # This is the Controller part of the GUI, handling input events that modify the Model
+    # def mousePressEvent(self, event):
+    #    # We can check which item, if any, that we clicked on by fetching the scene items (neat!)
+    #    pos = self.mapToScene(event.pos())
+    #    item = self.scene.itemAt(pos, self.transform())
+    #    if item is not None:
+    #        # Report back that the user clicked on the card at given position:
+    #        # The model can choose to do whatever it wants with this information.
+    #        self.model.clicked_position(item.position)
+
+    # You can remove these events if you don't need them.
+    # def mouseDoubleClickEvent(self, event):
+    #    self.model.flip() # Another possible event. Lets add it to the flip functionality for fun!
 
 
 ###################
 # Main test program
 ###################
 
-# Let's test it out
+# Lets test it out
 app = QApplication(sys.argv)
 hand = HandModel()
 

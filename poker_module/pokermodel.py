@@ -43,6 +43,7 @@ class HandModel(Hand, CardModel):
     def __init__(self):
         Hand.__init__(self)
         CardModel.__init__(self)
+        # Additional state needed by the UI
         self.flipped_cards = False
 
     def __iter__(self):
