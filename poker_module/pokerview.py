@@ -8,15 +8,17 @@ from pokermodel import *
 
 
 class TableScene(QGraphicsScene):
-    """ A scene with a table cloth background """
+    """A scene with a table cloth background"""
+
     def __init__(self) -> None:
         super().__init__()
-        self.tile = QPixmap('cards/table.png')
+        self.tile = QPixmap("cards/table.png")
         self.setBackgroundBrush(QBrush(self.tile))
 
 
 class CardItem(QGraphicsSvgItem):
-    """ A simple overloaded QGraphicsSvgItem that also stores the card position """
+    """A simple overloaded QGraphicsSvgItem that also stores the card position"""
+
     def __init__(self, renderer: QSvgRenderer, position: int) -> None:
         super().__init__()
         self.setSharedRenderer(renderer)
@@ -29,21 +31,26 @@ def read_cards() -> Dict[Tuple[int, Suit], QSvgRenderer]:
     :return: Dictionary of SVG renderers
     """
     all_cards: Dict[Tuple[int, Suit], QSvgRenderer] = {}
-    for suit_file, suit in zip('HSCD', Suit):
-        for value_file, value in zip(['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'], range(2, 15)):
+    for suit_file, suit in zip("HSCD", Suit):
+        for value_file, value in zip(
+            ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
+            range(2, 15),
+        ):
             file = value_file + suit_file
             key = (value, suit)
-            all_cards[key] = QSvgRenderer(f'cards/{file}.svg')
+            all_cards[key] = QSvgRenderer(f"cards/{file}.svg")
     return all_cards
 
 
 class CardView(QGraphicsView):
-    """ A View widget that represents the table area displaying a player's cards. """
+    """A View widget that represents the table area displaying a player's cards."""
 
-    back_card: QSvgRenderer = QSvgRenderer('cards/Red_Back_2.svg')
+    back_card: QSvgRenderer = QSvgRenderer("cards/Red_Back_2.svg")
     all_cards: Dict[Tuple[int, Suit], QSvgRenderer] = read_cards()
 
-    def __init__(self, card_model: CardModel, card_spacing: int = 250, padding: int = 10) -> None:
+    def __init__(
+        self, card_model: CardModel, card_spacing: int = 250, padding: int = 10
+    ) -> None:
         """
         Initializes the view to display the content of the given model
         :param card_model: A model that represents a set of cards. Needs to support the CardModel interface.
@@ -66,7 +73,9 @@ class CardView(QGraphicsView):
         self.scene.clear()
         for i, card in enumerate(self.model):
             graphics_key = (card.get_value(), card.suit)
-            renderer = self.back_card if self.model.flipped() else self.all_cards[graphics_key]
+            renderer = (
+                self.back_card if self.model.flipped() else self.all_cards[graphics_key]
+            )
             c = CardItem(renderer, i)
 
             shadow = QGraphicsDropShadowEffect(c)
@@ -84,8 +93,12 @@ class CardView(QGraphicsView):
         scale = (self.viewport().height() - 2 * self.padding) / 313
         self.resetTransform()
         self.scale(scale, scale)
-        self.setSceneRect(-self.padding // scale, -self.padding // scale,
-                          self.viewport().width() // scale, self.viewport().height() // scale)
+        self.setSceneRect(
+            -self.padding // scale,
+            -self.padding // scale,
+            self.viewport().width() // scale,
+            self.viewport().height() // scale,
+        )
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.update_view()
@@ -143,11 +156,11 @@ class ActionBar(QGroupBox):
         self.betting_amount.setMaximum(self.game.the_active_player_money)
 
     def update_blind(self) -> None:
-        self.blind_label.setText(f'Blind: {self.game.blind_player_name}')
+        self.blind_label.setText(f"Blind: {self.game.blind_player_name}")
 
 
 class PlayerView(QGroupBox):
-    def __init__(self, player: 'Player', game: TexasHoldEm) -> None:
+    def __init__(self, player: "Player", game: TexasHoldEm) -> None:
         super().__init__(player.name)
         self.player = player
         self.money_label = QLabel()
@@ -168,7 +181,7 @@ class PlayerView(QGroupBox):
         self.set_bold_title()
 
     def update_money(self) -> None:
-        self.money_label.setText(f'Money\n$ {self.player.money.value}')
+        self.money_label.setText(f"Money\n$ {self.player.money.value}")
 
     def set_bold_title(self) -> None:
         font = QFont()
@@ -218,4 +231,3 @@ class MyWindow(QMainWindow):
         layout.addWidget(ActionBar(game))
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-

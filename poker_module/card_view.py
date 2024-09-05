@@ -11,13 +11,14 @@ from typing import Iterator, Dict, Tuple
 # Models
 ###################
 
+
 class CardModel(QObject):
-    """ Base class that describes what is expected from the CardView widget """
+    """Base class that describes what is expected from the CardView widget"""
 
     new_cards = pyqtSignal()  #: Signal should be emitted when cards change.
 
     @abstractmethod
-    def __iter__(self) -> Iterator['MySimpleCard']:
+    def __iter__(self) -> Iterator["MySimpleCard"]:
         """Returns an iterator of card objects"""
         pass
 
@@ -74,16 +75,19 @@ class HandModel(Hand, CardModel):
 # Card widget code:
 ###################
 
+
 class TableScene(QGraphicsScene):
-    """ A scene with a table cloth background """
+    """A scene with a table cloth background"""
+
     def __init__(self) -> None:
         super().__init__()
-        self.tile = QPixmap('cards/table.png')
+        self.tile = QPixmap("cards/table.png")
         self.setBackgroundBrush(QBrush(self.tile))
 
 
 class CardItem(QGraphicsSvgItem):
-    """ A simple overloaded QGraphicsSvgItem that also stores the card position """
+    """A simple overloaded QGraphicsSvgItem that also stores the card position"""
+
     def __init__(self, renderer: QSvgRenderer, position: int) -> None:
         super().__init__()
         self.setSharedRenderer(renderer)
@@ -95,23 +99,30 @@ def read_cards() -> Dict[Tuple[int, int], QSvgRenderer]:
     Reads all the 52 cards from files.
     :return: Dictionary of SVG renderers
     """
-    all_cards: Dict[Tuple[int, int], QSvgRenderer] = dict()  # Dictionaries let us have convenient mappings between cards and their images
-    for suit_file, suit in zip('HDSC', range(4)):
-        for value_file, value in zip(['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'], range(2, 15)):
+    all_cards: Dict[Tuple[int, int], QSvgRenderer] = (
+        dict()
+    )  # Dictionaries let us have convenient mappings between cards and their images
+    for suit_file, suit in zip("HDSC", range(4)):
+        for value_file, value in zip(
+            ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
+            range(2, 15),
+        ):
             file = value_file + suit_file
             key = (value, suit)  # tuple to be the key for this dictionary
-            all_cards[key] = QSvgRenderer('cards/' + file + '.svg')
+            all_cards[key] = QSvgRenderer("cards/" + file + ".svg")
     return all_cards
 
 
 class CardView(QGraphicsView):
-    """ A View widget that represents the table area displaying a player's cards. """
+    """A View widget that represents the table area displaying a player's cards."""
 
     # We read all the card graphics as static class variables
-    back_card: QSvgRenderer = QSvgRenderer('cards/Red_Back_2.svg')
+    back_card: QSvgRenderer = QSvgRenderer("cards/Red_Back_2.svg")
     all_cards: Dict[Tuple[int, int], QSvgRenderer] = read_cards()
 
-    def __init__(self, card_model: CardModel, card_spacing: int = 250, padding: int = 10) -> None:
+    def __init__(
+        self, card_model: CardModel, card_spacing: int = 250, padding: int = 10
+    ) -> None:
         """
         Initializes the view to display the content of the given model
         :param card_model: A model that represents a set of cards. Needs to support the CardModel interface.
@@ -138,7 +149,9 @@ class CardView(QGraphicsView):
         for i, card in enumerate(self.model):
             # The ID of the card in the dictionary of images is a tuple with (value, suit), both integers
             graphics_key = (card.get_value(), card.suit)
-            renderer = self.back_card if self.model.flipped() else self.all_cards[graphics_key]
+            renderer = (
+                self.back_card if self.model.flipped() else self.all_cards[graphics_key]
+            )
             c = CardItem(renderer, i)
 
             # Shadow effects
@@ -161,8 +174,12 @@ class CardView(QGraphicsView):
         self.resetTransform()
         self.scale(scale, scale)
         # Put the scene bounding box
-        self.setSceneRect(-self.padding // scale, -self.padding // scale,
-                          self.viewport().width() // scale, self.viewport().height() // scale)
+        self.setSceneRect(
+            -self.padding // scale,
+            -self.padding // scale,
+            self.viewport().width() // scale,
+            self.viewport().height() // scale,
+        )
 
     def resizeEvent(self, painter: QResizeEvent) -> None:
         # This method is called when the window is resized.
