@@ -1,6 +1,8 @@
 # 2-player Texas Hold'em
 This is a simple 2 player texas hold'em game is initialized from command line with player names, player money and the blind amount. It offers a GUI showing the usual stuff important for a game of texas hold'em.
 
+![screenshot](example_image.png)
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
