@@ -31,6 +31,5 @@ pytest
 
 Enjoy!
 
-## Improvement
-- Initialization window for entering player names, money and blind amount.
+## Future Improvements
 - 2 second countdown after ending a turn to not reveal cards to opponent.
