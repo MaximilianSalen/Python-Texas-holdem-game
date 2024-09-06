@@ -78,7 +78,7 @@ class TableScene(QGraphicsScene):
 
     def __init__(self):
         super().__init__()
-        self.tile = QPixmap("cards/table.png")
+        self.tile = QPixmap("poker_module/cards/table.png")
         self.setBackgroundBrush(QBrush(self.tile))
 
 
@@ -106,7 +106,7 @@ def read_cards():
         ):
             file = value_file + suit_file
             key = (value, suit)  # tuple to be the key for this dictionary
-            all_cards[key] = QSvgRenderer("cards/" + file + ".svg")
+            all_cards[key] = QSvgRenderer("poker_module/cards/" + file + ".svg")
     return all_cards
 
 
@@ -114,7 +114,7 @@ class CardView(QGraphicsView):
     """A View widget that represents the table area displaying a players cards."""
 
     # We read all the card graphics as static class variables
-    back_card = QSvgRenderer("cards/Red_Back_2.svg")
+    back_card = QSvgRenderer("poker_module/cards/Red_Back_2.svg")
     all_cards = read_cards()
 
     def __init__(
