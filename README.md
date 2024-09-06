@@ -1,5 +1,5 @@
 # 2-player Texas Hold'em
-This is a simple 2 player texas hold'em game which is initialized from command line with player names, player money and the blind amount. It offers a GUI showing the usual stuff important for a game of texas hold'em.
+A simple 2-player Texas Hold'em poker game built with PyQt5. The game starts with a graphical interface where players input their names, starting money, and blind amount. After setting up, a game window displays player cards, the pot, and action buttons for betting, calling, checking, and folding. The game follows the standard Texas Hold'em rules and offers real-time updates during gameplay.
 
 ![screenshot](docs/poker_image.png)
 
