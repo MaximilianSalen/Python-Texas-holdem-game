@@ -291,3 +291,76 @@ class MyWindow(QMainWindow):
         layout.addWidget(ActionBar(game))
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+
+
+class InitializationWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Poker Game Setup")
+
+        # Layout for input fields
+        layout = QVBoxLayout()
+
+        # Player 1 Name
+        self.player1_label = QLabel("Player 1 Name:")
+        self.player1_input = QLineEdit()
+        layout.addWidget(self.player1_label)
+        layout.addWidget(self.player1_input)
+
+        # Player 2 Name
+        self.player2_label = QLabel("Player 2 Name:")
+        self.player2_input = QLineEdit()
+        layout.addWidget(self.player2_label)
+        layout.addWidget(self.player2_input)
+
+        # Starting Money
+        self.starting_money_label = QLabel("Starting Money:")
+        self.starting_money_input = QSpinBox()
+        self.starting_money_input.setRange(0, 100000)
+        layout.addWidget(self.starting_money_label)
+        layout.addWidget(self.starting_money_input)
+
+        # Blind Amount
+        self.blind_amount_label = QLabel("Blind Amount:")
+        self.blind_amount_input = QSpinBox()
+        self.blind_amount_input.setRange(0, 10000)
+        layout.addWidget(self.blind_amount_label)
+        layout.addWidget(self.blind_amount_input)
+
+        # Start Game Button
+        self.start_button = QPushButton("Start Game")
+        self.start_button.clicked.connect(self.start_game)
+        layout.addWidget(self.start_button)
+
+        self.setLayout(layout)
+
+    def start_game(self):
+        player1_name = self.player1_input.text()
+        player2_name = self.player2_input.text()
+        starting_money = self.starting_money_input.value()
+        blind_amount = self.blind_amount_input.value()
+
+        # Ensure valid input
+        if (
+            not player1_name
+            or not player2_name
+            or starting_money <= 0
+            or blind_amount <= 0
+        ):
+            QMessageBox.warning(
+                self, "Invalid Input", "Please fill in all fields correctly!"
+            )
+            return
+
+        game = TexasHoldEm(
+            [
+                Player(player1_name, starting_money),
+                Player(player2_name, starting_money),
+            ],
+            blind_amount,
+        )
+
+        # Close the initialization window and launch the game window
+        self.close()
+        self.game_window = MyWindow(game)
+        self.game_window.show()
