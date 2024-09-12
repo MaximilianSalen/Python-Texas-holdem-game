@@ -17,7 +17,7 @@ A simple 2-player Texas Hold'em poker game built with PyQt5. The game starts wit
 ## Usage
 To run the game, use the following command:
 ```bash
- python poker_module/pokergame.py
+ python pokergame.py
 ```
 
 Enter the names of the players on command line, followed by the amount of money each player is given and the blind amount.
