@@ -3,7 +3,7 @@ import os
 
 # Add the project root directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from poker_module.cardlib import *
+from src.cardlib import *
 import pytest
 
 

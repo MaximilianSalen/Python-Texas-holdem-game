@@ -1,4 +1,4 @@
-from pokerview import *
+from src import *
 import sys
 
 

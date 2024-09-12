@@ -1,6 +1,6 @@
-from PyQt5.QtCore import *
 import abc
-from cardlib import *
+from PyQt5.QtCore import *
+from .cardlib import *
 
 
 class CardModel(QObject):

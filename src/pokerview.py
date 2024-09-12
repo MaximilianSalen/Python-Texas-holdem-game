@@ -2,11 +2,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
-from cardlib import *
-import sys
-
-import pokermodel
-from pokermodel import *
+from .cardlib import *
+from .pokermodel import *
 
 
 class TableScene(QGraphicsScene):
@@ -14,7 +11,7 @@ class TableScene(QGraphicsScene):
 
     def __init__(self):
         super().__init__()
-        self.tile = QPixmap("poker_module/cards/table.png")
+        self.tile = QPixmap("src/cards/table.png")
         self.setBackgroundBrush(QBrush(self.tile))
 
 
@@ -45,7 +42,7 @@ def read_cards():
                 value,
                 suit,
             )  # I'm choosing this tuple to be the key for this dictionary
-            all_cards[key] = QSvgRenderer("poker_module/cards/" + file + ".svg")
+            all_cards[key] = QSvgRenderer("src/cards/" + file + ".svg")
         # print(all_cards)
     return all_cards
 
@@ -54,7 +51,7 @@ class CardView(QGraphicsView):
     """A View widget that represents the table area displaying a players cards."""
 
     # We read all the card graphics as static class variables
-    back_card = QSvgRenderer("poker_module/cards/Red_Back_2.svg")
+    back_card = QSvgRenderer("src/cards/Red_Back_2.svg")
     all_cards = read_cards()
 
     def __init__(
